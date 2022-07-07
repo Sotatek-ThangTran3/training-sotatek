@@ -1,5 +1,24 @@
+iframe {
+  display: none;
+}
+h4,
+p {
+  margin: 0;
+}
+
+.w100 {
+  width: 100%;
+}
 .metamask {
   text-align: center;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.m-10 {
+  margin: 10px;
 }
 
 .btn {
@@ -31,6 +50,14 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.table th,
+td {
+  font-size: 14px;
+}
+.table td {
+  padding: 5px 10px;
 }
 
 .metamask-text {

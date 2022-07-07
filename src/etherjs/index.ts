@@ -1,7 +1,6 @@
-import { ethers, providers, Signer } from "ethers";
+import { ethers, providers } from "ethers";
 import Abi from "abi/abi.json";
 import { DEFAULT_ADDRESS } from "constant/address";
-import { Interface } from "ethers/lib/utils";
 
 declare let window: any;
 
@@ -11,17 +10,15 @@ export const etherProvider = () => {
   return provider;
 };
 
-export const etherContract = (
-  address?: string,
-  jsonInterface?: Interface,
-  signerOrProvider?: Signer | providers.Provider
-) => {
+export const etherContract = (address?: string) => {
   const provider = etherProvider();
+
+  const signer = provider.getSigner();
 
   var contract = new ethers.Contract(
     address || DEFAULT_ADDRESS,
-    jsonInterface || Abi,
-    signerOrProvider || provider
+    Abi,
+    signer || provider
   );
   return contract;
 };
@@ -74,4 +71,49 @@ export const etherListenTransferOff = async (
   const eventFilter = contract.filters.Transfer();
 
   contract.off(eventFilter, callBack);
+};
+
+export const etherDeposit = async (
+  value: string,
+  onError: (error: any) => void
+) => {
+  const contract = etherContract();
+  try {
+    const amount = ethers.utils.parseEther(value);
+    const result = await contract.deposit({ value: amount });
+    return result;
+  } catch (error) {
+    onError(error);
+    console.log(error);
+  }
+};
+
+export const etherWithdraw = async (
+  value: string,
+  onError: (error: any) => void
+) => {
+  const contract = etherContract();
+
+  try {
+    const amount = ethers.utils.parseEther(value);
+    const result = await contract.withdraw(amount);
+    return result;
+  } catch (error) {
+    onError(error);
+
+    console.log(error);
+  }
+};
+
+export const etherBalanceOf = async (address: string) => {
+  const contract = etherContract();
+  try {
+    const result = await contract.balanceOf(address);
+
+    const amount = ethers.utils.formatEther(result);
+
+    return amount;
+  } catch (error) {
+    console.log(error);
+  }
 };
