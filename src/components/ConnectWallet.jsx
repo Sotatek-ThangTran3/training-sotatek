@@ -135,7 +135,11 @@ function ConnectWallet(props) {
             <input
               className="p-10 m-10"
               value={withdraw}
-              onChange={(e) => setWithdraw(e.target.value)}
+              onChange={(e) => {
+                setWithdraw(e.target.value);
+                setHashUrlWithdraw("");
+                setWithdrawMsg("");
+              }}
             />
             <button className="btn" onClick={() => handleWithdraw(withdraw)}>
               With draw
